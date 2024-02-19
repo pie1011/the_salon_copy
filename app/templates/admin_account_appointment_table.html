@@ -1,0 +1,56 @@
+
+{% macro renderSearchPopover() %}
+        <input type='text' id='searchAppointments' onkeyup='searchAppointmentsFunction()' />
+        {{ caller() }}
+{% endmacro %}
+
+
+<div class="tab-content " id="appointmentTabSource">
+    <div class="tab-pane fade show active table-responsive border-0 appointment-table-height" id="all" role="tabpanel" aria-labelledby="all-tab">
+        {% include 's_account_appt_table_top.html' %}
+
+        <div class="input-group input-group-sm px-5 py-2">
+            <input class="form-control" id="myAppointmentSearch" type="text" placeholder="Search by client name">
+            <span class="input-group-text text-secondary"><i class="fas fa-search"></i></span>
+        </div>
+
+        {% for event in all_appointments  %}
+            {% with all_clients = all_clients %}
+                {% with looper = loop.index %}
+                    {% include 'admin_account_appointment_list.html' %}
+                {% endwith %}
+            {% endwith %}
+        {% endfor %}
+
+        {% include 's_account_appt_table_bottom.html' %}
+
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="confirmed" role="tabpanel" aria-labelledby="confirmed-tab">
+        {% include 's_account_appt_table_top.html' %}
+        {% for event in all_appointments_confirmed  %}
+            {% with all_clients = all_clients %}
+                {% include 'admin_account_appointment_list.html' %}
+            {% endwith %}
+        {% endfor %}
+        {% include 's_account_appt_table_bottom.html' %}
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="requested" role="tabpanel" aria-labelledby="requested-tab">
+        {% include 's_account_appt_table_top.html' %}
+        {% for event in all_appointments_requested  %}
+            {% with all_clients = all_clients %}
+                {% include 'admin_account_appointment_list.html' %}
+            {% endwith %}
+        {% endfor %}
+        {% include 's_account_appt_table_bottom.html' %}
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="past" role="tabpanel" aria-labelledby="past-tab">
+        {% include 's_account_appt_table_top.html' %}
+        {% for event in all_appointments_past  %}
+            {% with all_clients = all_clients %}
+                {% include 'admin_account_appointments_past.html' %}
+            {% endwith %}
+        {% endfor %}
+        {% include 's_account_appt_table_bottom.html' %}
+    </div>
+</div>
+

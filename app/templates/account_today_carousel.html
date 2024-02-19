@@ -1,0 +1,41 @@
+<div id="carouselAppointments" class="carousel carousel-dark slide h-100" data-bs-ride="false" data-bs-interval="false">
+
+  <div class="carousel-indicators ">
+    {% if user_type ==  'stylist' %}
+      {% set these_appointments = stylist_appointments %}
+    {% elif user_type == 'admin' %}
+      {% set these_appointments = all_appointments %}
+    {% endif %}
+    {% for event in these_appointments %}
+    <button type="button" data-bs-target="#carouselAppointments" data-bs-slide-to="{{ loop.index - 1 }}" class="  {% if loop.index == 1 %} active {% endif %}" aria-current="{% if loop.index == 1 %} true {% endif %}" aria-label="Slide {{ loop.index }}"></button>
+    {% endfor %}
+  </div>
+    <div class="carousel-inner bg-bg-color-light shadow-inner p-1 p-md-2 border appointment-today-table-height overflow-scroll" id="carousel_body">
+
+      {% for event in these_appointments %}
+          <div class="carousel-item appointment-today-height {% if loop.index == 1 %} active {% endif %}" data-bs-interval="false">
+            
+          <!-- up next -->
+            <div class="up-next-left  {% if loop.index != 1 %} d-none {% endif %}"></div>
+            <div class="text-white up-next-text-left {% if loop.index != 1 %} d-none {% endif %}"><p class="fs-4">UP NEXT</p></div>
+  
+            {% include 'account_today.html' %}
+
+          </div>
+      {% endfor %}
+    </div>
+
+  <div class="carousel-card ">
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselAppointments" data-bs-slide="prev">
+      <span class="text-primary pt-1 fs-4"><i class="fas fa-arrow-circle-left"></i></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+  
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselAppointments" data-bs-slide="next">
+      <span class="text-primary pt-1 fs-4"><i class="fas fa-arrow-circle-right"></i></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+</div>
+

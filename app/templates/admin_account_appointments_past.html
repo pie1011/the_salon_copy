@@ -1,0 +1,57 @@
+    
+{% macro renderAdminClient(username) %}
+{% for client in all_clients %}
+    {% if client.username == username %}
+        {{ client.first_name }}<span class="me-2 d-none d-lg-inline"> {{ client.last_name }}</span>
+        {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro renderStylist(username) %}
+{% for stylist in stylists %}
+    {% if stylist.username == username %}
+        {{ stylist.first_name }}<span class="me-2 d-none d-lg-inline"> {{ stylist.last_name }}</span>
+        {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+
+<tr class="list-group-item-action client-list-item w-100 text-secondary" style="transform: rotate(0deg);">
+    <td class="text-secondary py-1">
+        <i class="link-hidden p-0 m-0 me-2 stretched-link fas fa-info small" data-bs-toggle="modal" href="#apptCard{{event.id}}" role="tab" aria-controls="{{ event.date.strftime("%B %d") }}{{ event.client_name }}" aria-label="{{ event.date.strftime("%B %d") }}{{ event.client_name }}"></i>
+        <strong class="d-none d-md-inline-flex text-center">{{ event.date.strftime("%A") }} </strong>
+        <strong class="d-inline-flex d-md-none text-center">{{ event.date.strftime("%a") }} </strong>
+    </td>
+    <td class="text-secondary py-1">
+        <span class="d-none d-md-inline-flex text-center">{{ event.date.strftime("%B %d") }}</span>
+        <span class="d-inline-flex d-md-none text-center">{{ event.date.strftime("%m/%d") }}</span>
+    </td>
+    <td class="text-secondary py-1">
+        {{ event.time.strftime("%l:%M %p") }}
+    </td>
+    <td class="text-secondary py-1">
+        <a class="btn text-secondary btn-small fs-6 p-0 m-0 stretched-link" data-bs-toggle="modal" href="#apptCard{{event.id}}" role="tab" aria-controls="{{ event.date.strftime("%B %d") }}{{ event.client_name }}" aria-label="{{ event.date.strftime("%B %d") }}{{ event.client_name }}">
+            {% call renderAdminClient(event.client_name) %}{% endcall %}
+        </a> 
+    </td>
+    <td class="text-secondary py-1">
+        <a class="btn text-secondary btn-small fs-6 p-0 m-0 stretched-link" data-bs-toggle="modal" href="#apptCard{{event.id}}" role="tab" aria-controls="{{ event.date.strftime("%B %d") }}{{ event.client_name }}" aria-label="{{ event.date.strftime("%B %d") }}{{ event.client_name }}">
+            {% call renderStylist(event.stylist_name) %}{% endcall %}
+        </a> 
+    </td>
+    <div class="btn-on-top position-relative">
+        <td class="text-secondary text-center py-1">
+
+        {% if event.requested == True %}
+            <form action="{{ url_for('confirm_appt', id=event.id) }}" method="post">
+                {{ confirm_form.hidden_tag() }}
+                <span class="badge bg-white text-secondary rounded-pill"><i class="fas fa-times small"></i> past unconfirmed</span>
+            </form>
+        {% else %}
+            <span class="badge bg-white text-secondary rounded-pill"><i class="fas fa-check"></i> past appointment</span>
+        {% endif %}
+        </td>
+    </div>
+</tr>

@@ -1,0 +1,15 @@
+
+<table class="table my-0 p-0 appointment-list-height " id="appointmentsTable">
+    <thead class="bg-white">
+        <tr>
+            <th scope="col" class="ps-4">Day</th>
+            <th scope="col"  onclick="sortTable(1, this)" style="cursor: pointer;">Date <i class="fas fa-sort small"></i></th>
+            <th scope="col" >Time</th>
+            <th scope="col" onclick="sortTable(3, this)" style="cursor: pointer;" class="ps-3">Client <i class="fas fa-sort small"></i></th>
+            {% if user_type == 'admin' %}
+                <th scope="col" onclick="sortTable(4, this)" style="cursor: pointer;" class="ps-3">Stylist</th>
+            {% endif %}
+            <th scope="col" class="text-center">Status</th>
+        </tr>
+    </thead>
+    <tbody class="overflow-scroll" id="appointments-searchable">

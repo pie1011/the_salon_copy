@@ -1,0 +1,787 @@
+{% extends "base.html" %}
+{% set active_page = "admin_account" %}
+
+{% block content %}
+
+<!-- ROW 1: Appointments -->
+<div class="row p-1 px-0 px-xxl-5 m-0 mx-xxl-5 bg-transparent">
+
+    <!-- APPOINTMENTS COLUMN -->
+    <div class="col-12 px-0 ps-md-0 m-0 appointment-height" id="appointments_card">
+        <div class="card mb-3">
+
+            <!-- Appointment Header -->
+            <div class="card-header bg-white">
+                <div class="w-100 d-flex flex-row justify-content-between">
+                    <h2 class="m-2 d-block d-lg-none"><i class="fas fa-clock text-primary fs-5"></i>  TODAY</h2> 
+                    <h2 class="m-2 d-none d-lg-block"><i class="fas fa-clock text-primary fs-5"></i>  {{ date_now }}
+                    </h2>
+
+                    <h2 class="m-2 d-none d-md-block">Appointments                            
+                        <i class="fas fa-calendar-alt text-primary fs-5 d-none d-md-inline-block"></i>
+                    </h2>
+                    
+                </div>
+            </div>
+
+
+            <!-- APPOINTMENTS COLUMN - all appointments -->
+            <div class="card-body">
+                {% include 'admin_account_appointments.html' %}
+            </div>
+
+
+
+            <div class="card-footer p-2 text-end " style="height: 55px;">
+                <button type="button" class="btn btn-outline-secondary border d-none d-md-inline-block float-start me-2" id="expandAppointments"><i class="fas fa-arrows-alt-v"></i></button>
+                <button type='button' class="btn btn-outline-secondary border float-start"  id='btn' value='Print' onclick='printDiv();'><i class="fas fa-print"></i>&nbsp; print today</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#requestAppt"><i class="fas fa-calendar-alt"></i> Book Client Appointment</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#requestAppt"><i class="fas fa-calendar-alt"></i> Request Appointment</button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+<!-- Appointments today body row -->
+<div class="row p-0 m-0 ">
+
+    <!-- APPOINTMENTS TODAY COLUMN - carousel with items -->
+    <div class="col-12 col-md-6 col-lg-5 px-0  ps-sm-3 ps-md-4 pe-md-0 m-0 position-relative " id="today_card">
+        <div class="card-body appointment-item p-0 me-md-0 appointment-height " id="today_body">
+            {% include 'stylist_account_today_carousel.html' %}
+        </div>
+    </div>
+
+    <!-- Filler and Header for small screens -->
+    <div class="col-12 d-block d-md-none bg-primary border-top border-bottom">
+        <!-- filler for mobile --> &nbsp;
+    </div>
+    <div class="card-header bg-white text-start text-md-end border-top d-block d-md-none">
+        <h2 class="m-2">
+            <i class="fas fa-calendar-alt text-primary fs-5 d-inline-block d-md-none"></i>
+                Appointments                            
+        </h2>
+    </div>
+</div>
+{% include 'print_today.html' %}
+
+
+<!-- ROW 2: Profile and Account -->
+<div class="row m-0 p-1 px-0 px-xxl-5 m-0 mx-xxl-5 bg-transparent">
+
+    <!-- PROFILE COLUMN -->
+    <div class="col-12 col-sm-8 px-1 px-lg-3">
+        <div class="card mb-3">
+            <div class="card-body text-dark bg-light">
+                <!-- Profile Image and Name -->
+                <div class=" d-flex flex-column flex-sm-row align-items-center profile-head bg-white mb-3 pt-2 mx-0" id="box">
+                    <div class="ratio ratio-1x1 w-25 profile-img">
+                        <img src="{{ url_for('static', filename='uploads/profiles/'+current_user.image) }}" class="img-thumbnail rounded-circle profile-img"  data-bs-toggle="modal" data-bs-target="#uploadProfile">
+                        <div class="profile-img-edit text-center align-bottom mt-5 pt-5 pb-0 mb-0 fs-4 text-light" alt="edit"   data-bs-toggle="modal" data-bs-target="#uploadProfile">
+                            <i class="fas fa-camera position-absolute rounded mt-2 pt-5 ps-5 profile-img-camera"></i>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="card-title display-5 px-5">{{ current_user.first_name }} {{ current_user.last_name }} </h4>
+                        <p class="display-5 fs-5 px-5 fs-6">username: {{ current_user.username }}</p>
+                    </div>
+                </div>
+                <!-- Contact and Notes -->
+                <div class="container-fluid card-text d-flex flex-column flex-lg-row flex-lg-row-reverse align-items-end d-none d-sm-flex">
+                    <div class="container card-text"  style="transform: rotate(0);">
+                        <table class="table table-borderless table-sm small">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <td scope="col" colspan="2"><strong>{{ user_type }} profile information</strong></td>
+                                </tr>
+                                <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>username: </td>
+                                    <td>{{ current_user.username }} </td>
+                                </tr>
+                                <tr>
+                                    <td>full name: </td>
+                                    <td> {{ current_user.first_name }} {{ current_user.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>stylist: </td>
+                                    <td>{{ current_user.preference }} </td>
+                                </tr>
+                                <tr>
+                                    <td>birthday: </td>
+                                    <td>{{ current_user.birthday.strftime('%B %d') }} </td>
+                                </tr>
+                                <tr>
+                                    <td>notes: </td>
+                                    <td>{{ current_user.notes }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Contact -->
+                    <div class="container card-text"  style="transform: rotate(0);">
+                        <table class="table table-borderless table-sm small">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <td scope="col" colspan="2"><strong>contact information</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody style="transform: rotate(0);">
+                                <tr>
+                                    <td>phone: </td>
+                                    <td>({{ current_user.phone[:3] }})
+                                        {{ current_user.phone[3:6] }}
+                                        -
+                                        {{ current_user.phone[6:10] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>email: </td>
+                                    <td>{{ current_user.email }} </td>
+                                </tr>
+                                <tr>
+                                    <td>address: </td>
+                                    <td>{{ current_user.address_one }} <br />
+                                        {{ current_user.address_two }} <br />
+                                    </td>
+                                </tr>
+                                <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Profile accordion for small screens -->
+            <div class="card-footer p-0 bg-light">
+                <div class="accordion accordion-flush d-block d-sm-none m-0" id="accordionProfile">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="profile-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#profile-collapseOne" aria-expanded="false" aria-controls="profile-collapseOne">
+                            View Profile Information
+                        </button>
+                        </h2>
+                        <div id="profile-collapseOne" class="accordion-collapse collapse" aria-labelledby="profile-headingOne" data-bs-parent="#accordionProfile">
+                        <div class="accordion-body px-0">
+                            <div class="container-fluid card-text d-flex flex-column flex-lg-row flex-lg-row-reverse align-items-end">
+                                <div class="container card-text"  style="transform: rotate(0);">
+                                    <table class="table table-borderless table-sm small">
+                                        <thead class="border-bottom">
+                                            <tr>
+                                                <td scope="col" colspan="2"><strong>{{ user_type }} profile information</strong></td>
+                                            </tr>
+                                            <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+        
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>username: </td>
+                                                <td>{{ current_user.username }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>full name: </td>
+                                                <td> {{ current_user.first_name }} {{ current_user.last_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>stylist: </td>
+                                                <td>{{ current_user.preference }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>birthday: </td>
+                                                <td>{{ current_user.birthday.strftime('%B %d') }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>notes: </td>
+                                                <td>{{ current_user.notes }}</td>
+                                            </tr>
+        
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Contact -->
+                                <div class="container card-text"  style="transform: rotate(0);">
+                                    <table class="table table-borderless table-sm small">
+                                        <thead class="border-bottom">
+                                            <tr>
+                                                <td scope="col" colspan="2"><strong>contact information</strong></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="transform: rotate(0);">
+                                            <tr>
+                                                <td>phone: </td>
+                                                <td>({{ current_user.phone[:3] }})
+                                                    {{ current_user.phone[3:6] }}
+                                                    -
+                                                    {{ current_user.phone[6:10] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>email: </td>
+                                                <td>{{ current_user.email }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>address: </td>
+                                                <td>{{ current_user.address_one }} <br />
+                                                    {{ current_user.address_two }} <br />
+                                                </td>
+                                            </tr>
+                                            <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+                                        </tbody>
+                                    </table>
+                                </div>
+        
+                            </div>
+                            <div class="container">
+                                <button type="button" class="btn btn-secondary btn-small" data-bs-toggle="modal" data-bs-target="#updateProfile">
+                                    <i class="fas fa-key"></i> Change Password
+                                </button> 
+                                <button type="button" class="btn btn-secondary btn-small" data-bs-toggle="modal" data-bs-target="#updateProfile">
+                                    <i class="fas fa-user-edit"></i> Update Profile
+                                </button>
+                            </div>                                    
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Profile footer buttons  -->
+            <div class="card-footer text-end bg-white d-none d-sm-block">
+                <button type="button" class="btn btn-secondary btn-small" data-bs-toggle="modal" data-bs-target="#updateProfile">
+                    <i class="fas fa-key"></i> Change Password
+                </button> 
+                <button type="button" class="btn btn-secondary btn-small" data-bs-toggle="modal" data-bs-target="#updateProfile">
+                    <i class="fas fa-user-edit"></i> Update Profile
+                </button>
+
+            </div>
+        </div>    
+    </div>
+
+
+
+    <!-- ACCOUNT & LINKS COLUMN -->
+    <div class="col-12 col-sm-4 px-1 px-lg-3">
+        <!-- Jump to links -->
+        <div class="dropdown p-1" id="jumptoMenuContainer">
+            <button class="form-control btn btn-secondary dropdown-toggle" type="button" id="jumptoMenu" data-bs-toggle="dropdown" aria-label="jumptoMenu" aria-expanded="false">
+                jump to section...
+            </button>
+            <ul class="dropdown-menu bg-bright-light w-100 shadow" aria-labelledby="jumptoMenu">
+                <li><a href="#today_card" class="dropdown-item">today at-a-glance</a></li>
+                <li><a href="#appointments_card" class="dropdown-item">appointments</a></li>
+                <li><a href="#client_card" class="dropdown-item">clients</a></li>
+                <li><a href="#gift_cards_card" class="dropdown-item">gift cards</a></li>
+            </ul>
+        </div>
+
+        <div class="card mb-3  ">
+            <div class="card-header table-other"><h2 class="m-2"><i class="fas fa-dollar-sign fs-6"></i>  account</h2></div>
+
+            <div class="card-header">Account Balance</div>
+            <div class="card-body text-dark">
+                <!-- Current Balance -->
+                <div class="d-flex justify-content-between my-3">
+                    <h3>Current Balance:</h3> <h3>${{'%0.2f'| format(current_user.balance|float)}}</h3>
+                </div>
+            </div>
+            <div class="card-header">Current Charges</div>
+            <div class="card-body text-dark">
+                <div class="d-flex justify-content-between my-3">
+                    <h3>Amount Due:</h3> <h3>${{'%0.2f'| format(current_user.balance|float)}}</h3>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="#" class="btn btn-secondary">View History</a>
+                <a href="#" class="btn btn-primary">Pay Now</a>
+            </div>
+        </div>
+    </div>   
+    
+</div>
+
+
+
+
+<!-- ROW 3: Clients and Gift Cards -->
+<div class="row p-1 px-0 px-xxl-5 mx-0 mx-xxl-5 bg-transparent position-relative">
+
+    <!-- CLIENTS COLUMN -->
+    {% if user_type == 'admin' %}
+        <div class="col-12 col-lg-8 px-0 px-lg-3" id="clients_card">
+            <!-- Client List  -->
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <h2 class="m-2"><i class="fas fa-users text-primary fs-6"></i>  Clients</h2>
+                </div>
+                <div class="card-body bg-white text-dark p-0 pe-0 pe-md-3 pe-lg-4 mx-0 d-flex flex-column flex-md-row align-items-stretch">
+                    {% include 'admin_account_client_list.html' %}
+                </div>
+                <div class="card-footer p-2 text-end">
+                    <button class="btn btn-secondary">Add Client</button>
+                    <button class="btn btn-secondary">Remove Client</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- Filler and Header for small screens -->
+    <div class="col-12 d-block d-md-none bg-primary border-top border-bottom">
+        <!-- filler for mobile --> &nbsp;
+    </div>
+
+
+    <!-- GIFT CARD COLUMN -->
+    <div class="col-12 col-lg-4 px-1 px-lg-3" id="gift_cards_card">
+
+        <!-- GIFT CARDS ROW -->
+        <div class="card mb-3 ">
+            <div class="card-header table-other"><h2 class="m-2"><i class="fas fa-gift fs-6"></i>  gift cards</h2></div>
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="purchased-tab" data-bs-toggle="tab" data-bs-target="#purchased" type="button" role="tab" aria-controls="purchased" aria-selected="true">Purchased Cards</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="redeemed-tab" data-bs-toggle="tab" data-bs-target="#redeemed" type="button" role="tab" aria-controls="redeemed" aria-selected="false">Redeemed Gift Cards</button>
+                </ul>
+            </div>
+            <div class="card-body text-dark">
+                <div class="tab-content" id="myTabContent">
+                    <!-- Purchased Gift Cards -->
+                    <div class="tab-pane fade show active" id="purchased" role="tabpanel" aria-labelledby="purchased-tab">
+                        <ul class="list-group">
+                            {% for card in all_gift_cards  %}
+                                {% if card.redeemed == False %}
+                                <li class="list-group-item  d-flex justify-content-between align-items-center"><strong>{{ card.number }}</strong>
+                                    <span class="badge">
+                                        <span class=" text-success">${{'%0.2f'| format(card.amount|float)}} </span>
+                                        <span>{{ card.owned_by }}</span>
+                                        <span class="ms-2"> <a type="button" class="btn-primary rounded-pill btn-bright p-2 py-1 open-sendCard" data-id={{card.number}}  data-bs-toggle="modal" href="#sendCard" >Send</a> </span>
+                                    </span>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+                    <!-- Redeemed Cards -->
+                    <div class="tab-pane fade" id="redeemed" role="tabpanel" aria-labelledby="redeemed-tab">
+                        <ul class="list-group">
+                            {% for card in all_gift_cards  %}
+                                {% if card.redeemed == True %}
+                                <li class="list-group-item text-secondary  d-flex justify-content-between align-items-center">{{ card.number }}
+                                    <span class="badge">
+                                        <span class=" text-secondary">${{'%0.2f'| format(card.amount|float)}} - </span>
+                                        <span class=" text-danger">  REDEEMED</span>
+                                    </spanc>
+
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+
+        <!-- Logout -->
+        <div class="container-fluid text-end p-0 m-0">
+            <a href="{{ url_for('logout') }}" class="btn btn-primary"><i class="fas fa-user-times"></i> Logout</a>
+        </div>
+
+
+    </div> <!-- END side column -->
+
+
+
+{% with notifications = get_flashed_messages(with_categories=true, category_filter=["notification"]) %}
+{% if notifications %}
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 15000">
+        <div class="toast-container">
+        {% with confirmed_events = client_appointments_new_confirmed %}
+        {% for category, notification in notifications %}
+
+            <div class="{{category}} toast bg-bright-light text-dark" id="notification" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-bright fs-6">
+                    
+                    {{notification}} <br />
+                </div>
+            </div>
+            {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endwith %}
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- MODAL: Request Appointment -->
+<div class="modal fade" id="requestAppt" tabindex="-1" aria-labelledby="requestApptLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/appointments" method="post">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-white" id="requestApptLabel">Request Appointment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+                {% set request_form = request_form %}
+            
+                {{ request_form.hidden_tag() }}
+            
+                    <div class="form-floating mb-3">
+                      {% if current_user.is_authenticated %}
+                        {% if current_user.user_type == "client" %}
+                          {{ request_form.client_name(class_="form-control", value=current_user.username) }}
+                        {% else %}
+                          {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                        {% endif %}
+                      {% else %}
+                        {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                      {% endif %}
+            
+                      {{ request_form.client_name.label }}
+                      {% for error in request_form.client_name.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+            
+                <div class="form-floating mb-3">
+                  {{ request_form.date(class_="form-control", placeholder="{{ request_form.date.label }}") }}
+                  {{ request_form.date.label }}
+                  {% for error in request_form.date.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                  {{ request_form.time(class_="form-control", placeholder="{{ request_form.time.label }}") }}
+                  {{ request_form.time.label }}
+                  {% for error in request_form.time.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                  {{ request_form.stylist_name(class_="form-control", placeholder="{{ request_form.stylist_name.label }}" ) }}
+                  {{ request_form.stylist_name.label }}
+                  {% for error in request_form.stylist_name.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-control mb-3">
+                    {{ request_form.services.label }}
+                  {{ request_form.services(class_="form-control") }}
+                  {% for error in request_form.services.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+
+            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          {{ request_form.submit(class_="btn btn-primary p-2") }}
+        </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Upload Profile Image-->
+<div class="modal fade" id="uploadProfile" tabindex="-1" aria-labelledby="uploadProfileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/upload_profile" method="post" enctype="multipart/form-data">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white" id="uploadProfileLabel">Upload Profile Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <input class="form-control" type=file name=file>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input class="btn btn-primary p-2" type=submit value=Upload>
+            </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Update Profile -->
+<div class="modal fade" id="updateProfile" tabindex="-1" aria-labelledby="updateProfileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/update_profile" method="post">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white" id="updateProfileLabel">Update Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light d-grid">
+                {% set profile_form = profile_form %}
+                {{ profile_form.hidden_tag() }}
+
+                {% for input in profile_form %}
+                    {% if input.id != 'csrf_token' and input.id != 'submit' %}
+                    <div class="input-group mb-3">
+                        {{ input.label(class_="input-group-text w-25") }} 
+                        {{ input(class_="form-control", value=current_user[input.id] ) }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                {{ profile_form.submit(class_="btn btn-primary p-2") }}
+            </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Send Gift Card -->
+<div class="modal fade" id="sendCard" tabindex="-1" aria-labelledby="sendCardLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/send_card" method="post">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-white" id="sendCardLabel">Send Gift Card</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+                {% set send_card_form = send_card_form %}
+            
+                {{ send_card_form.hidden_tag() }}
+            
+                <p>Enter the email address of the recipient:</p>
+
+                <div class="form-floating mb-3">
+                  {{ send_card_form.recipient(class_="form-control", placeholder="{{ send_card_form.recipient.label }}") }}
+                  {{ send_card_form.recipient.label }}
+                  {% for error in send_card_form.recipient.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ send_card_form.card_number(class_="form-control") }}
+
+                    {{ send_card_form.card_number.label }}
+                    {% for error in send_card_form.card_number.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          {{ send_card_form.submit(class_="btn btn-primary p-2") }}
+        </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Client Card -->
+{% for client in all_clients %}
+<div class="modal fade" id="clientCard{{client.username}}" tabindex="-1" aria-labelledby="clientCard{{client.username}}Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-dark" id="clientCard{{client.username}}Label">Client Info</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+            {% include 'stylist_client_card.html' %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- MODAL: Appointment Card -->
+{% for event in all_appointments %}
+<div class="modal fade" id="apptCard{{event.id}}" tabindex="-1" aria-labelledby="apptCard{{event.id}}Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header bg-dark">
+            <h5 class="modal-title text-white" id="apptCard{{event.id}}Label">Details</h5>
+            <button type="button" class="btn-close mb-1 me-2" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times fs-4 text-white"></i>
+            </button>
+        </div>
+        <div class="modal-header bg-primary">
+        <h5 class="modal-title text-dark" id="apptCard{{event.id}}Label">Appointment Info</h5>
+        </div>
+        <div class="modal-body bg-light">
+            {% with all_appointments = all_appointments %}
+            {% set active_modal = 'disabled text-dark' %}
+                {% include 'stylist_account_today.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="modal-header bg-primary">
+            <h5 class="modal-title text-dark" id="apptCard{{event.id}}Label">Client Info</h5>
+        </div>
+        <div class="modal-body bg-light">
+
+            {% set username = event.client_name  %}
+            {% for client in all_clients %}
+                {% if client.username == username %}
+                    {% include 'stylist_client_card.html' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- Client search form and toggle visibility for small screens -->
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+
+    var value = $(this).val().toLowerCase();
+    $("#list-tab li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+$(document).ready(function(){
+  $("#myAppointmentSearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#appointments-searchable tr td:nth-child(4)").filter(function() {
+      $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+
+// Expand Appointments
+$("#expandAppointments").click(function(){
+    $("#today_body").toggleClass("appointment-height");
+    $("#today_body").toggleClass("appointment-height2");
+    $("#carousel_body").toggleClass("appointment-table-height");
+    $("#carousel_body").toggleClass("appointment-table-height2");
+    $("#appointment-table-div").toggleClass("appointment-table-height");
+    $("#appointment-table-div").toggleClass("appointment-table-height2");
+    $("#all").toggleClass("appointment-table-height");
+    $("#all").toggleClass("appointment-table-height2");
+    $("#appointmentsTable").toggleClass("appointment-list-height");
+    $("#appointmentsTable").toggleClass("appointment-list-height2");
+});
+</script>
+
+<script>
+// Print today's appointments
+function printDiv() 
+{
+    document.getElementById('DivIdToPrint').classList.add('visible')
+    var divToPrint=document.getElementById('DivIdToPrint');
+    var newWin=window.open('','Print-Window');
+    newWin.document.open();
+    newWin.document.write('<body onload="window.print\(\)">'+divToPrint.innerHTML+'</body></html>');
+    newWin.document.close();
+    setTimeout(function(){newWin.close();},10);
+
+}    
+</script>
+
+
+
+
+<script>
+function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("appointmentsTable");
+    switching = true;
+    dir = "asc"; 
+    
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        
+        for (i = 1; i < (rows.length - 2); i++) {
+            
+            shouldSwitch = false;
+            /*Get the two elements you want to compare, one from current row and one from the next:*/
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            /*check if the two rows should switch place, based on the direction, asc or desc:*/
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    //if so, mark as a switch and break the loop:
+                    shouldSwitch= true;
+                    console.log(x.innerText)
+                    break;
+                }
+            } 
+            else if (dir == "desc") {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    //if so, mark as a switch and break the loop:
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount ++;      
+        } else {
+            if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+            }
+        }
+    }
+}
+</script>
+
+{% endblock %}
+

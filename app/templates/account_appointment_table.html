@@ -1,0 +1,139 @@
+
+{% macro renderSearchPopover() %}
+        <input type='text' id='searchAppointments' onkeyup='searchAppointmentsFunction()' />
+        {{ caller() }}
+{% endmacro %}
+
+{% macro sortBy(sorter) %}
+    {% set sortAttribute = sorter %}
+    {{ caller() }}
+{% endmacro %}
+
+{% macro renderAppointments(attr) %}
+    {% for event in stylist_appointments|sort(attribute=attr) %}
+        {% with clients = clients %}
+            {% include 'account_appointment_list.html' %}
+        {% endwith %}
+    {% endfor %}  
+{% endmacro %}
+
+{% macro renderAllAppointments(attr) %}
+    {% for event in all_appointments|sort(attribute=attr) %}
+        {% with clients = clients %}
+            {% include 'account_appointment_list.html' %}
+        {% endwith %}
+    {% endfor %}  
+{% endmacro %}
+{% set sortAttribute = 'date' %}
+
+
+<div class="tab-content " id="appointmentTabSource">
+    <div class="tab-pane fade show active table-responsive border-0 appointment-table-height" id="all" role="tabpanel" aria-labelledby="all-tab">
+
+        <div class="input-group input-group-sm px-5 py-2">
+            <input class="form-control" id="myAppointmentSearch" type="text" placeholder="Search by client name">
+            <span class="input-group-text text-secondary"><i class="fas fa-search"></i></span>
+        </div>
+        {% include 'account_appointment_table__top.html' %}
+
+        {% if user_type == 'stylist' %}
+            {% for event in stylist_appointments  %}
+                {% with clients = clients %}
+                {% with looper = loop.index %}
+                    {% include 'account_appointment_list.html' %}
+                    {% include 'account_appointment_list.html' %}
+                    {% include 'account_appointment_list.html' %}
+                    {% include 'account_appointment_list.html' %}
+                {% endwith %}
+                {% endwith %}
+            {% endfor %}
+            
+        {% elif user_type == 'client' %}
+            {% for event in client_appointments %}
+                {% include 'client_account_appointments.html' %}
+            {% endfor %}
+            
+        {% elif user_type == 'admin' %}
+            {% for event in all_appointments  %}
+                {% with clients = clients %}
+                {% with looper = loop.index %}
+                    {% include 'account_appointment_list.html' %}
+                    {% endwith %}
+                {% endwith %}
+            {% endfor %}
+
+        {% endif %}
+        {% include 'account_appointment_table__bottom.html' %}
+
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="confirmed" role="tabpanel" aria-labelledby="confirmed-tab">
+        {% include 'account_appointment_table__top.html' %}
+        {% if user_type == 'stylist' %}
+            {% for event in stylist_appointments_confirmed %}
+                {% with clients = clients %}
+                    {% include 'account_appointment_list.html' %}
+                {% endwith %}
+            {% endfor %}   
+
+        {% elif user_type == 'client' %}
+            {% for event in client_appointments_confirmed %}
+                {% include 'client_account_appointments.html' %}
+            {% endfor %}
+
+        {% elif user_type == 'admin' %}
+            {% for event in all_appointments_confirmed  %}
+                {% with clients = clients %}
+                    {% include 'account_appointment_list.html' %}
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+        {% include 'account_appointment_table__bottom.html' %}
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="requested" role="tabpanel" aria-labelledby="requested-tab">
+        {% include 'account_appointment_table__top.html' %}
+        {% if user_type == 'stylist' %}
+            {% for event in stylist_appointments_requested %}
+                {% with clients = clients %}
+                    {% include 'account_appointment_list.html' %}
+                {% endwith %}
+            {% endfor %}   
+
+        {% elif user_type == 'client' %}
+            {% for event in client_appointments_requested %}
+                {% include 'client_account_appointments.html' %}
+            {% endfor %}
+
+        {% elif user_type == 'admin' %}
+            {% for event in all_appointments_requested  %}
+                {% with clients = clients %}
+                    {% include 'account_appointment_list.html' %}
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+        {% include 'account_appointment_table__bottom.html' %}
+    </div>
+    <div class="tab-pane fade table-responsive border-0 appointment-table-height" id="past" role="tabpanel" aria-labelledby="past-tab">
+        {% include 'account_appointment_table__top.html' %}
+        {% if user_type == 'stylist' %}
+            {% for event in stylist_appointments_past %}
+                {% with clients = clients %}
+                    {% include 'account_appointments_past.html' %}
+                {% endwith %}
+            {% endfor %}   
+
+        {% elif user_type == 'client' %}
+            {% for event in client_appointments_requested %}
+                {% include 'client_account_appointments.html' %}
+            {% endfor %}
+
+        {% elif user_type == 'admin' %}
+            {% for event in all_appointments_past  %}
+                {% with clients = clients %}
+                    {% include 'account_appointments_past.html' %}
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+        {% include 'account_appointment_table__bottom.html' %}
+    </div>
+</div>
+

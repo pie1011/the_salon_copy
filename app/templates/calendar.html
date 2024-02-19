@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-5 pt-5 text-center head">
+    <br /><br />
+    <h1>{{ title }}</h1>
+    <div class="head-skew"></div>
+</div>
+
+<div class="container-fluid justify-content-center body-skew-container">
+    <div class="body-skew"></div>
+    <div class="container d-flex flex-column flex-md-row align-items-center p-3 p-sm-5 bg-primary">
+        <div class="container w-auto">
+
+            <h3>Hello, {{ current_user.username }}!</h3>
+            <ul>
+                {% for event in events %}
+                    <li>{{ event }}</li>
+                {% endfor %}
+            </ul>
+
+            <iframe src="https://calendar.google.com/calendar/embed?src=0ep3it7o7l0dp9m42n44mdgdck%40group.calendar.google.com&ctz=America%2FLos_Angeles" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+        </div>
+    </div>
+</div>
+
+<div class=" py-3" style="margin-bottom: -20px; z-index: 20">
+    <img src="/static/images/img-adam-winger-KVVjmb3IIL8-unsplash.png" class="img-fluid" alt="">
+</div>
+{% endblock %}

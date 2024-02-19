@@ -1,0 +1,14 @@
+<!-- Flash message alerts -->
+{% for category, message in messages %}
+{% if 'notification' not in category %}
+
+<div class="alert {{ category }} alert-dismissable fade show text-center m-0">
+    {% if category == 'alert-warning' %}
+        <strong>Uh oh! </strong>
+    {% endif %}
+    {{ message }}
+    <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endif %}
+{% endfor %}

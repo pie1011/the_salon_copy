@@ -1,0 +1,46 @@
+
+
+
+## Virtual environment:
+
+    Create venv:
+    python -m venv venv
+
+    Activate the venv:
+    source venv/bin/activate
+
+    Activate pip, sqlite3, etc:
+    source /opt/miniconda3/bin/activate
+
+
+
+## Set FLASK_APP envirnoment variable:
+
+    A. Automatic importing of the app across terminal sessions:
+    $ pip install python-dotenv
+    Create file .flaskenv file with FLASK_APP=thesalon.py
+
+    B. Set the Flask app default:
+    export FLASK_APP=thesalon.py
+
+
+## Set localhost:
+
+    Change localhost for device access in app:
+    if __name__ == "__main__":
+        app.run(host='0.0.0.0')
+
+
+
+## Run the app:
+
+    flask run 
+    python thesalon.py
+
+
+# Database Setup
+
+    flask db init
+    flask db migrate -m "users table"
+    - replace users with name, ie customers for Customer model
+    flask db upgrade

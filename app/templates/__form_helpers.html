@@ -1,0 +1,13 @@
+
+
+{% macro render_field(field) %}
+<div class="container d-flex flex-column text-start">
+    <div class="form-floating m-2">
+        {{ field(class_="form-control", placeholder="{{ field.label }}", **kwargs)|safe }}
+        {{ field.label }}
+        {% for error in field.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}

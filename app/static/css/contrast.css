@@ -1,0 +1,87 @@
+htm[data-theme='light'] {
+    --color-bg: #D2EAEC;
+    --color-bg-light: #edf3f4;
+    --color-dark: #000;
+    --color-gray: #e2e3e5;
+    --color-light: #FFFFFF;
+    --color-shape: #c7a2a2;
+    --color-error: #f57676;
+    --color-bright: #f57676;
+    --color-bright-mid: #FB9C92;
+    --color-bright-mid-light: #FAD6CD;
+    --color-bright-light: #FEF6F6;
+    --color-bright-text: #f57676;
+    --color-primary: #1c747c;
+    --color-secondary: #578f96;
+    --color-highlight: #ffcece;
+    --color-heading1: #000;
+    --color-heading2: #1c747c;
+    --color-heading3: #000000;
+    --color-heading4: #439097;
+    --color-link: #f57676;
+    --color-purple: #D2DDEC;
+}
+html[data-theme='contrast'] {
+    --color-bg: #D2EAEC;
+    --color-bg-light: #edf3f4;
+    --color-dark: #000;
+    --color-gray: #e2e3e5;
+    --color-light: #FFFFFF;
+    --color-shape: #c7a2a2;
+    --color-error: #f57676;
+    --color-bright: #be4646;
+    --color-bright-mid: #be4646;
+    --color-bright-mid-light: #dd9090;
+    --color-bright-light: #FEF6F6;
+    --color-bright-text: #000000;
+    --color-primary: #155e64;
+    --color-secondary: #1c747c;
+    --color-highlight: #ffcece;
+    --color-heading1: #000;
+    --color-heading2: #1c747c;
+    --color-heading3: #000000;
+    --color-heading4: #439097;
+    --color-link: #f57676;
+    --color-purple: #D2DDEC;
+}
+  
+[data-theme='contrast'] .form-control {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.6);
+    color: var(--text-color) !important;
+}
+  
+[data-theme='contrast'] .form-control:focus {
+    color: var(--text-color) !important;
+}
+  
+[data-theme='light'] .d-block-light,
+[data-theme='contrast'] .d-block-dark {
+    display: block !important;
+}
+
+/* Add this script to base file: */
+<script>
+
+// Toggle High Contrast 
+var toggleTheme = document.getElementById("theme-toggle");
+
+var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "contrast" : "light");
+if (storedTheme)
+    document.documentElement.setAttribute('data-theme', storedTheme)
+
+
+toggleTheme.onclick = function() {
+    var currentTheme = document.documentElement.getAttribute("data-theme");
+    var targetTheme = "light";
+
+    if (currentTheme === "light") {
+        targetTheme = "contrast";
+    }
+
+    document.documentElement.setAttribute('data-theme', targetTheme)
+    localStorage.setItem('theme', targetTheme);
+};
+
+
+</script>

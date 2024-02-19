@@ -1,0 +1,560 @@
+{% extends "base.html" %}
+{% set active_page = "client_account" %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+    <div class="row">
+        <div class="col-md-8">
+            <!-- User Profile -->
+            <h2 class="m-3">Welcome, {{ current_user.username }}!</h2>
+            <div class="card mb-3">
+                <div class="card-body text-dark bg-light">
+                    <!-- Profile Image and Name -->
+                    <div class="container-fluid d-flex flex-column flex-sm-row align-items-center bg-white profile-head mb-3 pt-2">
+                        <div class="ratio ratio-1x1 w-25 profile-img">
+                            <img src="{{ url_for('static', filename='uploads/profiles/'+current_user.image) }}" class="img-thumbnail rounded-circle profile-img"  data-bs-toggle="modal" data-bs-target="#uploadProfile">
+                            <div class="profile-img-edit text-center align-bottom mt-5 pt-5 pb-0 mb-0 fs-4 text-light" alt="edit"   data-bs-toggle="modal" data-bs-target="#uploadProfile">
+                                <i class="fas fa-camera position-absolute rounded mt-2 pt-2 ps-5"></i>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="card-title display-5 px-5">{{ current_user.first_name }} {{ current_user.last_name }} </h4>
+                            <p class="display-5 fs-5 px-5 fs-6">username: {{ current_user.username }}</p>
+                        </div>
+                    </div>
+                    <!-- Contact and Notes -->
+                    <div class="container-fluid card-text d-flex flex-column flex-lg-row flex-lg-row-reverse align-items-end">
+                        <div class="container card-text"  style="transform: rotate(0);">
+                            <table class="table table-borderless table-sm small">
+                                <thead class="border-bottom">
+                                    <tr>
+                                        <td scope="col" colspan="2"><strong>client profile information</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>username: </td>
+                                        <td>{{ current_user.username }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>password: </td>
+                                        <td><a href="">change password</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>full name: </td>
+                                        <td> {{ current_user.first_name }} {{ current_user.last_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>stylist: </td>
+                                        <td>{{ current_user.preference }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>birthday: </td>
+                                        <td>{{ current_user.birthday.strftime('%B %d') }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>notes: </td>
+                                        <td>{{ current_user.notes }}</td>
+                                    </tr>
+                                    <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container card-text"  style="transform: rotate(0);">
+                            <table class="table table-borderless table-sm small">
+                                <thead class="border-bottom">
+                                    <tr>
+                                        <td scope="col" colspan="2"><strong>contact information</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody style="transform: rotate(0);">
+                                    <tr>
+                                        <td>phone: </td>
+                                        <td>({{ current_user.phone[:3] }})
+                                            {{ current_user.phone[3:6] }}
+                                            -
+                                            {{ current_user.phone[6:10] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>email: </td>
+                                        <td>{{ current_user.email }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>address: </td>
+                                        <td>{{ current_user.address_one }} <br />
+                                            {{ current_user.address_two }} <br />
+                                        </td>
+                                    </tr>
+                                    <a href="" class="stretched-link text-end edit-link" data-bs-toggle="modal" data-bs-target="#updateProfile"><i class="fas fa-pencil-alt small text-primary edit-hover position-absolute end-0 pe-4 pt-2"></i></a>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="card-footer text-end bg-white">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateProfile">
+                        <i class="fas fa-user-edit"></i> Update Profile
+                    </button>
+
+                </div>
+            </div>
+            <!-- Upcoming Appointments -->
+            <h2 class="m-2"><i class="far fa-clock text-primary fs-6"></i>  Appointments</h2>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="float-start mt-2">Upcoming Appointments</div>
+                    <ul class="nav nav-tabs card-header-tabs justify-content-end" id="appointmentTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="requested-tab" data-bs-toggle="tab" data-bs-target="#requested" type="button" role="tab" aria-controls="requested" aria-selected="false">Requested</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab" data-bs-target="#confirmed" type="button" role="tab" aria-controls="confirmed" aria-selected="false">Confirmed</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body text-dark">
+                    <div class="tab-content" id="appointmentTabSource">
+                        <div class="tab-pane fade show active table-responsive" id="all" role="tabpanel" aria-labelledby="all-tab">
+                            <table class="table ">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Stylist</th>
+                                    <th scope="col">Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in client_appointments %}
+                                    {% include 'client_account_appointments.html' %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade table-responsive" id="confirmed" role="tabpanel" aria-labelledby="confirmed-tab">
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Stylist</th>
+                                    <th scope="col">Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in client_appointments_confirmed %}
+                                    {% include 'client_account_appointments.html' %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade table-responsive" id="requested" role="tabpanel" aria-labelledby="requested-tab">
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Stylist</th>
+                                    <th scope="col">Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in client_appointments_requested %}
+                                    {% include 'client_account_appointments.html' %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button small bg-light py-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Past Appointments
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body table-responsive">
+                            <table class="table text-secondary">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Stylist</th>
+                                    <th scope="col">Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for event in client_appointments %}
+                                    {% include 'client_account_appointments_past.html' %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestAppt"><i class="fas fa-calendar-alt"></i> Request Appointment</button>
+
+
+        </div>
+
+        <div class="col-md-4">
+            <h2 class="m-3 invisible">Account</h2>
+
+            <!-- Current Charges -->
+            <div class="card mb-3  ">
+                <div class="card-header">Current Charges</div>
+                <div class="card-body text-dark">
+                    <div class="d-flex justify-content-between my-3">
+                        <h3>Amount Due:</h3> <h3>${{'%0.2f'| format(current_user.balance|float)}}</h3>
+                    </div>
+                    <a href="#" class="form-control btn btn-primary">Pay Now</a>
+                </div>
+            </div>
+
+            <!-- Account Balance -->
+            <div class="card mb-3  ">
+                <div class="card-header">Account Balance</div>
+                <div class="card-body text-dark">
+                    <!-- Current Balance -->
+                    <div class="d-flex justify-content-between my-3">
+                        <h3>Current Balance:</h3> <h3>${{'%0.2f'| format(current_user.balance|float)}}</h3>
+                    </div>
+                    <a href="#" class="form-control btn btn-primary">View Tansaction History</a>
+                </div>
+            </div>
+
+            <!-- Gift Cards -->
+            <h2 class="m-3"><i class="fas fa-gift fs-6"></i> Gift Cards</h2>
+            <div class="card mb-3  ">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="purchased-tab" data-bs-toggle="tab" data-bs-target="#purchased" type="button" role="tab" aria-controls="purchased" aria-selected="true">Purchased Cards</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="redeem-tab" data-bs-toggle="tab" data-bs-target="#redeem" type="button" role="tab" aria-controls="redeem" aria-selected="false">Redeem Gift Card</button>
+                    </ul>
+                </div>
+                <div class="card-body text-dark">
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Purchased Gift Cards -->
+                        <div class="tab-pane fade show active" id="purchased" role="tabpanel" aria-labelledby="purchased-tab">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-secondary">Owned</li>
+                                {% for card in gift_cards_owned  %}
+                                    {% if card.redeemed == False %}
+                                    <li class="list-group-item  d-flex justify-content-between align-items-center"><strong>{{ card.number }}</strong>
+                                        <span class="badge">
+                                            <span class=" text-success">${{'%0.2f'| format(card.amount|float)}} </span>
+                                            <span class="ms-2"> <a class="btn btn-success rounded-pill px-2 py-0 mb-1"  href="{{ url_for('redeem_card_client',user_id=current_user.id,card_num=card.number) }}">Redeem</a> </span>
+                                            <span class="ms-2"> <a class="btn btn-secondary rounded-pill px-2 py-0 mb-1 open-sendCard" data-id={{card.number}}  data-bs-toggle="modal" href="#sendCard" >Send</button> </a>
+
+                                        </span>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                <li class="list-group-item list-group-item-secondary">Redeemed</li>
+                                {% for card in gift_cards_redeemed  %}
+                                    {% if card.redeemed == True %}
+                                    <li class="list-group-item text-secondary  d-flex justify-content-between align-items-center">{{ card.number }}
+                                        <span class="badge">
+                                            <span class=" text-secondary">${{'%0.2f'| format(card.amount|float)}} - </span>
+                                            <span class=" text-danger">  REDEEMED</span>
+                                        </spanc>
+
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Redeem Card -->
+                        <div class="tab-pane fade" id="redeem" role="tabpanel" aria-labelledby="redeem-tab">
+                            <form action="{{ url_for('redeem_card') }}" method="post">
+                                {{ redeem_form.hidden_tag() }}
+                            
+                                <div class="form-floating mb-3">
+                                    {{ redeem_form.number(class_="form-control", placeholder="{{ redeem_form.number.label }}") }}
+                                    {{ redeem_form.number.label }}
+                                    {% for error in redeem_form.number.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {{ redeem_form.submit(class_="form-control btn btn-primary") }}
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid text-end p-0 m-0"><a href="{{ url_for('logout') }}" class="btn btn-primary"><i class="fas fa-user-times"></i> Logout</a></div>
+
+        </div>
+
+    </div>
+      
+
+</div>
+
+<!-- MODAL: Request Appointment -->
+<div class="modal fade" id="requestAppt" tabindex="-1" aria-labelledby="requestApptLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/appointments" method="post">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-white" id="requestApptLabel">Request Appointment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+                {% set request_form = request_form %}
+            
+                {{ request_form.hidden_tag() }}
+            
+                    <div class="form-floating mb-3">
+                      {% if current_user.is_authenticated %}
+                        {% if current_user.user_type == "client" %}
+                          {{ request_form.client_name(class_="form-control", value=current_user.username) }}
+                        {% else %}
+                          {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                        {% endif %}
+                      {% else %}
+                        {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                      {% endif %}
+            
+                      {{ request_form.client_name.label }}
+                      {% for error in request_form.client_name.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+            
+                <div class="form-floating mb-3">
+                  {{ request_form.date(class_="form-control", placeholder="{{ request_form.date.label }}") }}
+                  {{ request_form.date.label }}
+                  {% for error in request_form.date.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                  {{ request_form.time(class_="form-control", placeholder="{{ request_form.time.label }}") }}
+                  {{ request_form.time.label }}
+                  {% for error in request_form.time.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                  {{ request_form.stylist_name(class_="form-control", placeholder="{{ request_form.stylist_name.label }}" ) }}
+                  {{ request_form.stylist_name.label }}
+                  {% for error in request_form.stylist_name.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                  {{ request_form.service(class_="form-control", placeholder="{{ request_form.service.label }}") }}
+                  {{ request_form.service.label }}
+                  {% for error in request_form.service.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+
+            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          {{ request_form.submit(class_="btn btn-primary p-2") }}
+        </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Upload Profile Image-->
+<div class="modal fade" id="uploadProfile" tabindex="-1" aria-labelledby="uploadProfileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/upload_profile" method="post" enctype="multipart/form-data">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white" id="uploadProfileLabel">Upload Profile Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <input class="form-control" type=file name=file>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input class="btn btn-primary p-2" type=submit value=Upload>
+            </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Update Profile -->
+<div class="modal fade" id="updateProfile" tabindex="-1" aria-labelledby="updateProfileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/update_profile" method="post">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white" id="updateProfileLabel">Update Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light d-grid">
+                {% set profile_form = profile_form %}
+                {{ profile_form.hidden_tag() }}
+
+                {% for input in profile_form %}
+                    {% if input.id != 'csrf_token' and input.id != 'submit' %}
+                    <div class="input-group mb-3">
+                        {{ input.label(class_="input-group-text w-25") }} 
+                        {{ input(class_="form-control", value=current_user[input.id] ) }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                {{ profile_form.submit(class_="btn btn-primary p-2") }}
+            </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+
+<!-- MODAL: Send Gift Card -->
+<div class="modal fade" id="sendCard" tabindex="-1" aria-labelledby="sendCardLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="/send_card" method="post">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-white" id="sendCardLabel">Send Gift Card</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+                {% set send_card_form = send_card_form %}
+            
+                {{ send_card_form.hidden_tag() }}
+            
+                <p>Enter the email address of the recipient:</p>
+
+                <div class="form-floating mb-3">
+                  {{ send_card_form.recipient(class_="form-control", placeholder="{{ send_card_form.recipient.label }}") }}
+                  {{ send_card_form.recipient.label }}
+                  {% for error in send_card_form.recipient.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ send_card_form.card_number(class_="form-control") }}
+
+                    {{ send_card_form.card_number.label }}
+                    {% for error in send_card_form.card_number.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          {{ send_card_form.submit(class_="btn btn-primary p-2") }}
+        </div>
+        </form>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+  
+            
+<!-- Request Appointment -->
+<div class="card mb-3">
+    <div class="card-header">Request Appointment</div>
+    <div class="card-body text-dark">
+
+        <h5 class="card-title">{{ current_user.username }}</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <form action="/appointments" method="post">
+            {% set request_form = request_form %}
+        
+            {{ request_form.hidden_tag() }}
+        
+                <div class="form-floating mb-3">
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.user_type == "client" %}
+                        {{ request_form.client_name(class_="form-control", value=current_user.username) }}
+                    {% else %}
+                        {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                    {% endif %}
+                    {% else %}
+                    {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+                    {% endif %}
+        
+                    {{ request_form.client_name.label }}
+                    {% for error in request_form.client_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+        
+            <div class="form-floating mb-3">
+                {{ request_form.date(class_="form-control", placeholder="{{ request_form.date.label }}") }}
+                {{ request_form.date.label }}
+                {% for error in request_form.date.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ request_form.time(class_="form-control", placeholder="{{ request_form.time.label }}") }}
+                {{ request_form.time.label }}
+                {% for error in request_form.time.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ request_form.stylist_name(class_="form-control", placeholder="{{ request_form.stylist_name.label }}" ) }}
+                {{ request_form.stylist_name.label }}
+                {% for error in request_form.stylist_name.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ request_form.service(class_="form-control", placeholder="{{ request_form.service.label }}") }}
+                {{ request_form.service.label }}
+                {% for error in request_form.service.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            <p>
+                {{ request_form.submit(class_="form-control btn btn-primary") }}</p>
+            </form>
+    </div>
+</div>

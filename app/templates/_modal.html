@@ -1,0 +1,35 @@
+
+
+<div class="modal fade" id="stylistLogin" tabindex="-1" aria-labelledby="stylistLoginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stylistLoginLabel">Stylist Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/stylist_login" method="post">
+                <input id="csrf_token" name="csrf_token" type="hidden" value="ImYzZTU5YTI5OTM1NWIyMDI0NmRjNjFkZDdjZmM4Njg3ZTNjZWYyYTMi.YGo_ww.XIsUDsZk20ODuyi-cK0y9YQ0zkc">
+                <input class="d-none" id="user_type" name="user_type" required="" type="text" value="stylist">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="username" name="username" placeholder="{{ form.username.label }}" required="" type="text" value="">
+                    <label for="username">Username</label>
+                    
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="password" name="password" placeholder="{{ form.password.label }}" required="" type="password" value="">
+                    <label for="password">Password</label>
+                    
+                </div>
+                <div class="form-check form-switch mb-3 d-flex flex-row fs-6">
+                    <input class="form-control form-check-input rounded-pill" id="flexSwitchCheckChecked" name="remember_me" type="checkbox" value="y">
+                    <p class="ps-3"> &nbsp;<label for="remember_me">Remember Me</label></p>
+                </div>
+                <p>
+                    <input class="form-control btn btn-primary" id="submit" name="submit" type="submit" value="Login"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

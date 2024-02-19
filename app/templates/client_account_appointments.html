@@ -1,0 +1,48 @@
+
+{% if  event.date %}
+    {% if event.date.strftime("%B %d, %Y") >= today.strftime("%B %d, %Y") %}
+
+        {% if event.date.strftime("%B %d, %Y") == today.strftime("%B %d, %Y") %}
+        <tr class="table-success" data-bs-toggle="tooltip" data-bs-placement="left" title="Today!">
+        {% else %}
+        <tr>
+        {% endif %}
+
+        <th scope="row flex-row flex-wrap"><span class="me-2">{{ event.date.strftime("%A") }} </span></th>
+        <td>{{ event.date.strftime("%B %d") }}</td>
+        <td>{{ event.time.strftime("%l:%M %p") }}</td>
+        <td>
+            {% for service in event.services %}
+                - {{ service.name }} <br />
+            {% endfor %}
+        </td>        
+        <td>{{ event.stylist_name }}</td>
+        <td>
+            {% if event.confirmed == False %}
+                <span class="badge bg-none text-danger rounded-pill"><i class="fas fa-question-circle"></i> unconfirmed</span>
+            {% else %}
+                <span class="badge bg-none text-success rounded-pill"><i class="fas fa-check"></i> confirmed!</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+{% else %}
+<tr class="table-warning" data-bs-toggle="tooltip" data-bs-placement="left" title="Unscheduled Request!">
+
+    <th scope="row flex-row flex-wrap"><span class="me-2">NEW </span></th>
+        <td>schedule</td>
+        <td>schedule</td>
+    <td>{{ event.service }}</td>
+    <td>{{ event.stylist_name }}</td>
+    <td>
+        {% if event.confirmed == False %}
+        <span class="badge text-warning bg-none rounded-pill"><i class="fas fa-question-circle"></i> unscheduled</span>
+        {% else %}
+            <span class="badge bg-none text-success rounded-pill"><i class="fas fa-check"></i> confirmed!</span>
+        {% endif %}
+    </td>
+</tr>
+{% endif %}
+
+
+

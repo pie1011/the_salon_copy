@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% set active_page = "appointments" %}
+
+{% block content %}
+
+<div class="container p-1 pe-sm-5">
+
+  <h2>GOOD HAIR SPEAKS LOUDER THAN WORDS</h2>
+  <br />
+  <p>
+    Request an appointment today!
+  </p>
+
+</div>
+<div class="container mt-5 p-3 p-sm-5 bg-dark align-content-end text-center text-dark">
+  <form action="/appointments" method="post">
+    {{ request_form.hidden_tag() }}
+
+        <div class="form-floating mb-3">
+          {% if current_user.is_authenticated %}
+            {% if current_user.user_type == "client" %}
+              {{ request_form.client_name(class_="form-control", value=current_user.username) }}
+            {% else %}
+              {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+            {% endif %}
+          {% else %}
+            {{ request_form.client_name(class_="form-control", placeholder="{{ request_form.client_name.label }}") }}
+          {% endif %}
+
+          {{ request_form.client_name.label }}
+          {% for error in request_form.client_name.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+
+    <div class="form-floating mb-3">
+      {{ request_form.date(class_="form-control", placeholder="{{ request_form.date.label }}") }}
+      {{ request_form.date.label }}
+      {% for error in request_form.date.errors %}
+      <span>{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-floating mb-3">
+      {{ request_form.time(class_="form-control", placeholder="{{ request_form.time.label }}") }}
+      {{ request_form.time.label }}
+      {% for error in request_form.time.errors %}
+      <span>{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-floating mb-3">
+      {{ request_form.stylist_name(class_="form-control", placeholder="{{ request_form.stylist_name.label }}" ) }}
+      {{ request_form.stylist_name.label }}
+      {% for error in request_form.stylist_name.errors %}
+      <span>{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-floating mb-3">
+      {{ request_form.services.label }}
+
+      {{ request_form.services(class_="form-control") }}
+      {% for error in request_form.services.errors %}
+      <span>{{ error }}</span>
+      {% endfor %}
+    </div>
+    <p>
+      {{ request_form.submit(class_="form-control btn btn-primary") }}</p>
+  </form>
+</div>
+
+
+{% endblock %}

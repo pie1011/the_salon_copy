@@ -1,0 +1,79 @@
+<div class="col-12 col-lg-4 mx-0 px-0 h-100">    
+    <!-- Client search -->
+    <div class="card-header w-100 m-0">
+      <div class="input-group m-0 mb-1">
+        <input class="form-control" id="myInput" type="text" placeholder="Search">
+        <span class="input-group-text text-secondary"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <!-- Client list with items -->
+    <div class="bg-white client-list p-1 border-bottom overflow-scroll" style="max-height: 350px;" id="clientList">
+      <div class="list-group list-group list-group-flush" id="list-tab" role="tablist">
+
+        <!-- Show next appointment first -->
+        {% for client in all_clients %}
+          {% if all_next_appointment.client_name == client.username %}
+            <li class="list-group-item list-group-item-action toFilter client-list-item fw-bold active" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+                Next: {{ client.first_name }} {{ client.last_name }} <span class="d-none">{{ client.phone }} </span>
+            </li>   
+          {% endif %}
+        {% endfor %}
+
+          <!-- Client list items -->
+          {% for client in all_clients %}
+            <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+              {{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+            </li>  
+            <!-- Extra client list for testing purposes - delete when done -->        
+            <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+              <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+            </li> 
+            <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+              <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+            </li> 
+            <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+              <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+            </li>      
+          {%- endfor %}
+                    <!-- Extra client list for testing purposes - delete when done -->        
+
+          {% for client in all_clients %}
+          <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+            {{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+          </li>  
+          <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+            <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+          </li> 
+          <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+            <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+          </li> 
+          <li class="list-group-item list-group-item-action client-list-item toFilter py-1" id="list-{{client.id}}-list" data-bs-toggle="list" href="#list-{{client.id}}" role="tab" aria-controls="{{client.id}}">
+            <span>{{ client.first_name }} {{ client.last_name }}</span> <span class="d-none">{{ client.phone }} </span>
+          </li>      
+        {%- endfor %}
+        <li class="list-group-item">- end -</li>
+      </div>
+    </div>
+
+</div>
+
+<!-- Client info container -->
+<div class="col-12 col-lg-8 mx-0 px-0">
+  <div class="tab-content client-item p-1 px-0 px-md-2 px-lg-3 m-0 h-100 position-relative overflow-scroll" id="nav-tabContent">
+    {% for client in all_clients %}
+      {% if all_next_appointment.client_name == client.username  %}
+        <div class="tab-pane client-list-item fade show active " id="list-{{client.id}}" role="tabpanel" aria-labelledby="list-{{client.id}}-list">
+          <div class="up-next"></div>
+          <div class="text-white up-next-text"><p class="fs-4">UP NEXT</p></div>  
+          {% include 'stylist_client_card.html' %}
+        </div>
+      {% else %}
+        <div class="tab-pane client-list-item fade" id="list-{{client.id}}" role="tabpanel" aria-labelledby="list-{{client.id}}-list">
+          {% include 'stylist_client_card.html' %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+

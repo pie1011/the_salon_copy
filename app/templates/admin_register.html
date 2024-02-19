@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% set active_page = "admin_register" %}
+{% from '__form_helpers.html' import render_field %}
+
+{% block content %}
+<div class="container d-flex flex-column flex-md-row">
+
+        <div class="pt-5 p-1 pe-sm-5">
+            
+            <h2>Welcome to the salon!</h2>
+            <br />
+            <p>
+                Enter your information to register for access your administrator account, client information and schedule.
+            </p>
+
+        </div>
+        <div class="container mt-5 p-1 p-sm-2 bg-light align-content-end text-center text-black">
+            <form action="/admin_register" method="post">
+                <div class="container-fluid">
+
+                {% set admin_register_form = admin_register_form %}
+                {{ admin_register_form.hidden_tag() }}
+                {{ admin_register_form.user_type(value="admin", class_="d-none") }}
+
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1 mt-3">Contact Info</div>
+                <hr>
+                <div class="d-flex flex-column flex-sm-row m-1">
+                    {{ render_field(admin_register_form.first_name) }}
+                    {{ render_field(admin_register_form.last_name) }}
+                </div>
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1">
+                    {{ render_field(admin_register_form.email) }}
+                    {{ render_field(admin_register_form.phone) }}
+                </div>
+                <div class="d-flex flex-column flex-sm-row m-1">
+                    {{ render_field(admin_register_form.address_one) }}
+                    {{ render_field(admin_register_form.address_two) }}
+                </div>
+                <br />
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1">Login Info</div>
+                <hr>
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1">
+                    {{ render_field(admin_register_form.username) }}
+                </div>
+                <div class="d-flex flex-column flex-md-row m-1">
+                    {{ render_field(admin_register_form.password) }}
+                    {{ render_field(admin_register_form.password2) }}
+                </div>
+                <br />
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1">Client Notes</div>
+                <hr>
+                <div class="d-flex flex-column flex-sm-row m-1">
+                    {{ render_field(admin_register_form.preference) }}
+                    {{ render_field(admin_register_form.birthday) }}
+                </div>
+                <div class="d-flex flex-column flex-sm-row flex-wrap m-1">
+                    {{ render_field(admin_register_form.notes) }}
+                </div>
+                <br />
+            </div>
+            {{ admin_register_form.submit(class_="form-control btn btn-primary p-2") }}
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+

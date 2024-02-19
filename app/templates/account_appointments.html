@@ -1,0 +1,62 @@
+  
+
+<!-- Appointment list table -->
+<div class="tab-content" id="appointmentTabContent">
+    <div class="card-header bg-light w-100" style="height: 50px;">
+        <ul class="nav nav-tabs card-header-tabs justify-content-end px-md-3" id="appointmentTabs" role="tablist" >
+
+            <!-- PAST APPOINTMENTS -->
+            <li class="nav-item flex-grow-1" role="presentation">
+                <button class="nav-link text-secondary" id="past-tab" data-bs-toggle="tab" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">
+                    <i class="fas fa-history"></i> <span class="d-none d-lg-inline-block">&nbsp;Past Appointments</span>
+                </button>
+            </li>
+
+            <!-- REQUESTED APPOINTMENTS -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="requested-tab" data-bs-toggle="tab" data-bs-target="#requested" type="button" role="tab" aria-controls="requested" aria-selected="false">
+                {% if user_type == 'stylist' %}
+                    {% if stylist_requests %}                            
+                        <i class="fas fa-exclamation-triangle text-danger"></i>  
+                        {{ stylist_requests }}  
+                    {% else %}
+                        <i class="fas fa-question-circle"></i>
+                    {% endif %}                              
+                {% else %}
+                    {% if client_requests %}
+                        <i class="fas fa-exclamation-triangle text-danger"></i>  
+                        {{ client_requests }}
+                    {% endif %}
+                {% endif %}
+                <span class="d-none d-lg-inline-block">&nbsp;Requested</span>
+                </button>
+            </li>
+
+            <!-- CONFIRMED APPOINTMENTS -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab" data-bs-target="#confirmed" type="button" role="tab" aria-controls="confirmed" aria-selected="false">
+                    <i class="fas fa-check"></i> <span class="d-none d-lg-inline-block">&nbsp;Confirmed</span>
+                </button>
+            </li>
+
+            
+            <!-- ** ALL **  APPOINTMENTS -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                    <i class="fas fa-th-list"></i> <span class="d-none d-lg-inline-block">&nbsp;All</span>
+                </button>
+            </li>
+
+        </ul>
+    </div>
+    <div class="card-body text-dark border-0 p-0 px-md-3 appointment-table-height" id="appointment-table-div">
+        {% include 'account_appointment_table.html' %}
+        
+    </div>
+</div>
+
+
+
+
+
+

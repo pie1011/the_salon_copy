@@ -1,0 +1,58 @@
+
+{% macro renderClient(username) %}
+{% for client in clients %}
+    {% if client.username == username %}
+    {{ client.first_name }} {{ client.last_name }}
+    {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+
+
+<div class="card shadow-sm mx-1 mx-md-4 mx-lg-5 bg-body">
+<div class="card-header bg-bright-light d-flex flex-row justify-content-between align-content-end">
+    <div class="fs-4"><strong>{{ event.time.strftime("%l:%M %p") }}</strong></div>
+    <div class="fs-4">
+        {% call renderClient(event.client_name) %}{% endcall %}
+    </div>
+</div>
+
+<table class="table table-borderless">
+    <thead>
+        {% set duration = event.services | sum(attribute='duration') %}
+        {% set duration_hours = duration // 60 %}
+        {% set duration_minutes = duration - duration_hours|round %}
+        <tr>
+            <td colspan="2" class="fw-bold p-3">Time: {{ duration_hours|round|int }} hours and {{ duration - (duration_hours|round|int * 60) }} minutes</td>
+            <td class="text-end fw-bold p-3">Price: $ {{ event.services | sum(attribute='price') |round|int }} </td>
+        </tr>
+    </tead>
+    <thead class="table-light">
+        <th class="ps-2">Service</th>
+        <th class="text-center">Time</th>
+        <th class="text-end">Price</th>
+
+    </thead>
+
+    <tbody>
+        {% for service in event.services %}
+        <tr>
+            <td class="ps-3">
+                {{ loop.index }}. 
+                {{ service.name }}
+            </td>
+            <td class="text-end">{{ service.duration }} minutes</td>
+            <td class="text-end pe-2">${{ service.price|round|int }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+</table>
+<div class="container-fluid">
+    <p>Notes: </p> {{ event.notes }}
+</div>
+</div>
+<br>
+

@@ -1,0 +1,24 @@
+
+{% if  event.date %}
+
+{% if event.date.strftime("%B %d, %Y") > today.strftime("%B %d, %Y") %}
+    <tr class="text-secondary">
+        <th scope="row"><strong class="me-2"> {{ event.date.strftime("%A") }} </strong></th>
+        <td>{{ event.date.strftime("%B %d, %Y") }}</td>
+        <td>{{ event.time.strftime("%l:%M %p") }}</td>
+        <td>
+            {% for service in event.services %}
+                - {{ service.name }} <br />
+            {% endfor %}
+        </td>
+        <td>{{ event.stylist_name }}</td>
+        <td>
+            <span class="badge bg-white text-secondary rounded-pill"><i class="fas fa-check"></i> past appointment</span>
+        </td>
+    </tr>
+
+{% endif %}
+
+
+
+{% endif %}

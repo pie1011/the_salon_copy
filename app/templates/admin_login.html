@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set active_page = "admin_login" %}
+
+{% block content %}
+
+
+        <div class="container p-1 pe-sm-5">
+            
+            <h2>Welcome back!</h2>
+            <br />
+            <p>
+                Sign in for access your administrator account, client information and schedule.
+            </p>
+
+        </div>
+        <div class="container mt-5 p-3 p-sm-5 bg-light align-content-end text-center text-dark">
+            <form action="/admin_login" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.user_type(value="admin", class_="d-none") }}
+                <div class="form-floating mb-3">
+                    {{ form.username(class_="form-control", placeholder="{{ form.username.label }}") }}
+                    {{ form.username.label }}
+                    {% for error in form.username.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.password(class_="form-control", placeholder="{{ form.password.label }}") }}
+                    {{ form.password.label }}
+                    {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-check form-switch mb-3 d-flex flex-row fs-6">
+                    {{ form.remember_me(class_="form-control form-check-input rounded-pill", type="checkbox", id="flexSwitchCheckChecked") }}
+                    <p class="ps-3"> &nbsp;{{ form.remember_me.label }}</p>
+                </div>
+                <p>
+                    {{ form.submit(class_="form-control btn btn-primary") }}</p>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+

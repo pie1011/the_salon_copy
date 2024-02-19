@@ -1,0 +1,67 @@
+
+<div class="card shadow my-sm-3 ">
+    <div class="card-body">
+        <div class="row row-cols-2">
+
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='uploads/profiles/'+client.image) }}" class="img-thumbnail ratio-1x1 w-100 d-block d-sm-block" alt="...">
+                <img src="{{ url_for('static', filename='uploads/profiles/'+client.image) }}" class="img-thumbnail w-25 h-25 d-none d-sm-none" alt="...">
+            </div>
+            <div class="col-8 position-relative pb-5">
+                <h5 class="border-bottom my-3 display-6">{{ client.first_name }} {{ client.last_name }}
+                    {% if client.username == current_user.username %}<span class="text-success">- YOU!</span>{% endif %}
+                </h5>
+                <div class="container-fluid d-none d-sm-inline gy-3">
+                        <p>
+                            <div class="px-3 d-inline-block text-center text-teal-300"><i class="fas fa-phone-alt"></i> </div>
+                            ({{ client.phone[:3] }}) {{ client.phone[3:6] }}-{{ client.phone[6:10] }}
+                        </p>
+                        <p>
+                            <div class="px-3 d-inline-block text-center text-teal-300"><i class="far fa-envelope"></i> </div>
+                            {{ client.email|e }}
+                        </p>
+                        <p>
+                            <div class="px-3 d-inline-block text-center text-teal-300"><i class="fas fa-map-marker-alt"> </i> </div>
+                            {{ client.address_one }} <br />
+                            <div class="px-3 d-inline-block text-center text-white"><i class="fas fa-map-marker-alt"> </i> </div>
+                            {{ client.address_two }} <br />
+                        </p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-block d-sm-none p-1">
+            <p>
+                <div class="px-3 d-inline-block text-center text-teal-300"><i class="fas fa-phone-alt"></i> </div>
+                ({{ client.phone[:3] }}) {{ client.phone[3:6] }}-{{ client.phone[6:10] }}
+            </p>
+            <p>
+                <div class="px-3 d-inline-block text-center text-teal-300"><i class="far fa-envelope"></i> </div>
+                {{ client.email|e }}
+            </p>
+            <p>
+                <div class="px-3 d-inline-block text-center text-teal-300"><i class="fas fa-map-marker-alt"> </i> </div>
+                {{ client.address_one }} <br />
+                <div class="px-3 d-inline-block text-center text-white"><i class="fas fa-map-marker-alt"> </i> </div>
+                {{ client.address_two }} <br />
+            </p>
+    </div>
+        <hr />
+        <div class="row row-cols-2 px-1 px-md-4 gy-1 small">
+
+            <div class="col-4">username: </div>
+            <div class="col-8">{{ client.username }} </div>
+
+            <div class="col-4">birthday: </div>
+            <div class="col-8">{{ client.birthday.strftime('%B %d') }} </div>
+
+            <div class="col-4">notes: </div>
+            <div class="col-8">{{ client.notes }} </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-6"><button class="btn btn-bright btn-small mt-1" type="button" data-bs-toggle="?">book appointment</button></div>
+            <div class="col-6"><button class="btn btn-bright btn-small mt-1" type="button">send message</button></div>
+        </div>
+    </div>
+</div>

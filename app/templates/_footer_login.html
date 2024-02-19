@@ -1,0 +1,182 @@
+    
+    <footer class="sticky-bottom foot-1" style="border: 1px solid rgb(0, 255, 34);">
+        <div class="container-fluid d-flex flex-column flex-md-row pb-0 justify-content-between" style="border: 1px solid rgb(38, 0, 255);">
+            <div class="justify-self-start d-flex flex-column flex-md-row" style="border: 1px solid red;">
+                
+                <!-- Address -->
+                <div class="container pt-3">
+                    <strong>THE SALON</strong>
+                    <ul class="list-unstyled small">
+                        <li>555-123-4567</li>
+                        <li>123 Pretend Road<br />Madeuptown, CA 12345</li>
+                        <li>email@example.com</li>
+                    </ul>
+                </div>
+        
+                <!-- Navigation -->
+                <div class="container pt-3">
+                    <strong>SITE LINKS</strong>
+                    <ul class="list-unstyled small">
+                        {% for key, value in menu.items()  %}
+                        <li>
+                            <a aria-current="page" href="{{ value }}">{{ key }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        
+                <!-- Business Hours -->
+                <div class="container pt-3 justify-self-end">
+                    <strong>BUSINESS HOURS</strong>
+                    <ul class="list-unstyled small">
+                        <li>Monday: 10 AM – 9 PM</li>
+                        <li>Tuesday: 10 AM – 9 PM </li>
+                        <li>Wednesday: 10 AM – 9 PM </li>
+                        <li>Thursday: 10 AM – 9 PM </li>
+                        <li>Friday: 10 AM – 9 PM </li>
+                        <li><em>Saturday: 10 AM – 6 PM</em></li>
+                        <li><em>Sunday: CLOSED</em></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pb-4 ms-auto" style="border: 1px solid rgb(195, 0, 255);">
+            <!-- Stylist Access -->
+                <div class="container h-100 pt-3 d-flex flex-column bg-dark text-white text-center">
+                    <h2>Stylist Access</h2>
+    
+                    {% if current_user.is_anonymous %}
+                        <a href="{{ url_for('register') }}"" class="btn btn-primary">Stylist Registration</a>
+                        <br />
+                        <a href="{{ url_for('login') }}"" class="btn btn-primary">Stylist Login</a>
+                    {% else %}
+                        <p>Hi, {{ current_user.username }}!</p>
+                        <a href="{{ url_for('account') }}"" class="btn btn-primary">Stylist Account</a>
+                        <br />
+                        <a href="{{ url_for('logout') }}"" class="btn btn-primary">Stylist Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+    
+        </div>
+    </footer>
+
+
+
+
+
+
+
+
+<footer class="sticky-bottom foot-1">
+    <div class="p-4 pb-0 clearfix">
+        <div class="container float-start" style="border: 1px solid red;">
+            
+            <!-- Address -->
+            <div class="container pt-3">
+                <strong>THE SALON</strong>
+                <ul class="list-unstyled small">
+                    <li>555-123-4567</li>
+                    <li>123 Pretend Road<br />Madeuptown, CA 12345</li>
+                    <li>email@example.com</li>
+                </ul>
+            </div>
+    
+            <!-- Navigation -->
+            <div class="container pt-3">
+                <strong>SITE LINKS</strong>
+                <ul class="list-unstyled small">
+                    {% for key, value in menu.items()  %}
+                    <li>
+                        <a aria-current="page" href="{{ value }}">{{ key }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+    
+            <!-- Business Hours -->
+            <div class="container pt-3 justify-self-end">
+                <strong>BUSINESS HOURS</strong>
+                <ul class="list-unstyled small">
+                    <li>Monday: 10 AM – 9 PM</li>
+                    <li>Tuesday: 10 AM – 9 PM </li>
+                    <li>Wednesday: 10 AM – 9 PM </li>
+                    <li>Thursday: 10 AM – 9 PM </li>
+                    <li>Friday: 10 AM – 9 PM </li>
+                    <li><em>Saturday: 10 AM – 6 PM</em></li>
+                    <li><em>Sunday: CLOSED</em></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container d-inline-flex float-end">
+        <!-- Stylist Access -->
+            <div class="container h-100 pt-3 d-flex flex-column bg-dark text-white text-center float-end">
+                <h2>Stylist Access</h2>
+
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('register') }}"" class="btn btn-primary">Stylist Registration</a>
+                    <br />
+                    <a href="{{ url_for('login') }}"" class="btn btn-primary">Stylist Login</a>
+                {% else %}
+                    <p>Hi, {{ current_user.username }}!</p>
+                    <a href="{{ url_for('account') }}"" class="btn btn-primary">Stylist Account</a>
+                    <br />
+                    <a href="{{ url_for('logout') }}"" class="btn btn-primary">Stylist Logout</a>
+                {% endif %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+<!-- Copyright -->
+<footer class="sticky-bottom">
+    <div class="bg-dark text-center text-white p-3 ">
+        <p>© 2020 Copyright: Happy Styles Salon - Final project for CS50x</p>
+    </div>
+</footer>
+
+
+<!-- Stylist Login Modal
+<div class="modal fade" id="stylistLogin" tabindex="-1" aria-labelledby="stylistLoginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stylistLoginLabel">Stylist Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+class Client(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    phone = db.Column(db.String(20))
+    password_hash = db.Column(db.String(100))
+    appointments = db.relationship('Appointment', backref='client', lazy='dynamic')
+
+    def __repr__(self):
+        self.username = username
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+-->
+

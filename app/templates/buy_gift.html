@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% set active_page = "buy_gift" %}
+
+{% block content %}
+
+        <div class="container p-1 pe-sm-5">
+            
+            <h2>Buy a gift card!</h2>
+            <br />
+            <p>
+                Choose an amount to purchase.
+            </p>
+            <h3>
+                <a href="{{ url_for('check_card') }}">Check Card Balance</a>
+            </h3>
+
+
+
+        </div>
+        <div class="container mt-5 p-3 p-sm-5 bg-dark align-content-end text-center text-dark">
+            <form action="/buy_gift" method="post">
+                {{ form.hidden_tag() }}
+
+                {% if current_user.is_authenticated %}
+                    <div class="form-floating mb-3">
+                        {{ form.email(class_="form-control", placeholder="{{ form.email.label }}", value=current_user.email) }}
+                        {{ form.email.label }}
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                </div>  
+                {% else %}
+
+                    <div class="form-floating mb-3">
+                        {{ form.email(class_="form-control", placeholder="{{ form.email.label }}") }}
+                        {{ form.email.label }}
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>   
+                {% endif %}
+                <div class="form-floating mb-3">
+                    {{ form.amount(class_="form-control", placeholder="{{ form.amount.label }}") }}
+                    {{ form.amount.label }}
+                    {% for error in form.amount.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <p>
+                    {{ form.submit(class_="form-control btn btn-primary") }}</p>
+            </form>
+        </div>
+{% endblock %}
+

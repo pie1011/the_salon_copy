@@ -1,0 +1,74 @@
+    
+{% macro renderAdminClient(username) %}
+{% for client in all_clients %}
+    {% if client.username == username %}
+        {{ client.first_name }}<span class="me-2 d-none d-lg-inline"> {{ client.last_name }}</span>
+        {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro renderStylist(username) %}
+{% for stylist in stylists %}
+    {% if stylist.username == username %}
+        {{ stylist.first_name }}<span class="me-2 d-none d-lg-inline"> {{ stylist.last_name }}</span>
+        {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% if event.date %}
+{% if event.date.strftime("%B %d, %Y") >= today.strftime("%B %d, %Y") %}
+
+<tr class="list-group-item-action appointment-list-item w-100 " style="transform: rotate(0deg);">
+
+    <td class="py-1">
+        <i class="link-hidden p-0 m-0 me-2 stretched-link fas fa-info small" data-bs-toggle="modal" href="#apptCard{{event.id}}" role="tab" aria-controls="{{ event.date.strftime("%B %d") }}{{ event.client_name }}" aria-label="{{ event.date.strftime("%B %d") }}{{ event.client_name }}"></i>
+        <strong class="d-none d-md-inline-flex text-center">{{ event.date.strftime("%A") }} </strong>
+        <strong class="d-inline-flex d-md-none text-center">{{ event.date.strftime("%a") }} </strong>
+    </td>
+    <td class="py-1">
+        <span class="text-center">{{ event.date.strftime("%m/%d") }}</span>
+    </td>
+    <td class="py-1">
+        {{ event.time.strftime("%l:%M %p") }}
+    </td>
+    <td class="py-1">
+        {% call renderAdminClient(event.client_name) %}{% endcall %}
+    </td>
+    <td class="py-1">
+        {% call renderStylist(event.stylist_name) %}{% endcall %}
+    </td>
+    <td class="text-center py-1">
+        <div class="btn-on-top position-relative">
+        {% if event.requested == True %}
+            <form action="{{ url_for('confirm_appt', id=event.id) }}" method="post">
+                {{ confirm_form.hidden_tag() }}
+                {{ confirm_form.submit(class_=" btn-primary rounded-pill btn-bright btn-small btn-on-top position-relative") }}
+            </form>
+        {% else %}
+            <span class="badge bg-white text-dark rounded-pill"><i class="fas fa-check"></i> confirmed!</span>
+        {% endif %}
+        </div>
+    </td>
+
+</tr>
+
+{% endif %}
+{% else %}
+<tr class="table-warning" data-bs-toggle="tooltip" data-bs-placement="left" title="Unscheduled Request!">
+
+    <th scope="row flex-row flex-wrap"><strong class="me-2">NEW </strong></th>
+        <td>schedule</td>
+        <td>schedule</td>
+    <td>{{ event.service }}</td>
+    <td>{{ event.stylist_name }}</td>
+    <td>
+        {% if event.confirmed == False %}
+        <span class="badge text-dark bg-warning rounded-pill"><i class="fas fa-question-circle"></i> unscheduled</span>
+        {% else %}
+            <span class="badge bg-white text-dark rounded-pill"><i class="fas fa-check"></i> confirmed!</span>
+        {% endif %}
+    </td>
+</tr>
+{% endif %}

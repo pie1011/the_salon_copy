@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set active_page = "check_card" %}
+
+{% block content %}
+
+        <div class="container p-1 pe-sm-5">
+            
+            <h2>Check card!</h2>
+            <br />
+            <p>
+                Enter your 10-character gift card to check the balance.
+            </p>
+            {% if check %}
+                <h2>
+                    Balance: ${{'%0.2f'| format(check|float)}}
+                </h2>
+            {% endif %}
+
+
+
+        </div>
+        <div class="container mt-5 p-3 p-sm-5 bg-light align-content-end text-dark">
+            <h3>Enter your gift card code below.</h3>
+            <ul class="text-primary">
+                <li>Code should be 8 characters.</li> 
+            </ul>
+            <form action="/check_card" method="post">
+                {{ form.hidden_tag() }}
+            
+                <div class="form-floating mb-3">
+                    {{ form.number(class_="form-control", placeholder="{{ form.number.label }}") }}
+                    {{ form.number.label }}
+                    {% for error in form.number.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {{ form.submit(class_="form-control btn btn-primary") }}
+            </form>
+        </div>
+{% endblock %}
+

@@ -1,0 +1,209 @@
+// @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../bootstrap/scss/functions";
+
+
+
+// scss-docs-start gray-color-variables
+$white:    #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+// scss-docs-end gray-color-variables
+
+// fusv-disable
+// scss-docs-start gray-colors-map
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900
+);
+// scss-docs-end gray-colors-map
+// fusv-enable
+
+// scss-docs-start color-variables
+$blue:    #0d6efd;
+$indigo:  #6610f2;
+$purple:  #6f42c1;
+$pink:    #d63384;
+$red:     #dc3545;
+$orange:  #fd7e14;
+$yellow:  #ffc107;
+$green:   #198754;
+$teal:    #1c747c;
+$cyan:    #0dcaf0;
+$bright:  #f57676;
+$bg-color: #D2EAEC;
+// scss-docs-end color-variables
+
+
+$teal-100: tint-color($teal, 90%);
+$teal-200: tint-color($teal, 60%);
+$teal-300: tint-color($teal, 40%);
+$teal-400: tint-color($teal, 20%);
+$teal-500: $teal;
+$teal-600: shade-color($teal, 20%);
+$teal-700: shade-color($teal, 40%);
+$teal-800: shade-color($teal, 60%);
+$teal-900: shade-color($teal, 80%);
+
+$bright-100: tint-color($bright, 80%);
+$bright-200: tint-color($bright, 60%);
+$bright-300: tint-color($bright, 40%);
+$bright-400: tint-color($bright, 20%);
+$bright-500: $bright;
+$bright-600: shade-color($bright, 20%);
+$bright-700: shade-color($bright, 40%);
+$bright-800: shade-color($bright, 60%);
+$bright-900: shade-color($bright, 80%);
+
+// scss-docs-start colors-map
+$colors: (
+  "blue":       $blue,
+  "indigo":     $indigo,
+  "purple":     $purple,
+  "pink":       $pink,
+  "red":        $red,
+  "orange":     $orange,
+  "yellow":     $yellow,
+  "green":      $green,
+  "teal":       $teal,
+  "cyan":       $cyan,
+  "white":      $white,
+  "gray":       $gray-600,
+  "gray-dark":  $gray-800,
+  "bright":     $bright-400,
+  "bg-color":   $bg-color
+);
+// scss-docs-end colors-map
+
+// scss-docs-start theme-color-variables
+$primary:       $teal;
+$secondary:     $gray-600;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-900;
+$bright:        $bright-400;
+$bg-color:      $bg-color;
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-colors-map
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark,
+  "bright":     $bright,
+  "bg-color":   $bg-color,
+  "bg-color-light":   $teal-100,
+  "teal-300":   $teal-300
+
+);
+// scss-docs-end theme-colors-map
+
+$font-family-sans-serif:      "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+// Display
+$display-font-sizes: (
+  1: 5rem,
+  2: 4.5rem,
+  3: 4rem,
+  4: 3.5rem,
+  5: 3rem,
+  6: 2.5rem,
+  7: 2rem,
+  8: 1.5rem
+);
+
+// List Groups
+$list-group-hover-bg:               $teal-100;
+$list-group-action-color:           $gray-700;
+$list-group-action-hover-color:     $teal;
+$list-group-action-active-color:    $teal;
+$list-group-action-active-bg:       $teal-100;
+$list-group-active-color:           $teal;
+$list-group-active-bg:              $teal-100;
+
+
+$enable-shadows:              true;
+$enable-negative-margins:     true;
+
+
+$box-shadow-nav:  0 4px 8px 0 rgba(70, 70, 70, 0.1), 0 6px 20px 0 rgba(70, 70, 70, 0.1);
+$box-shadow-inner: inset 0 0 15px rgba(0, 0, 0, 0.2);
+
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/utilities";
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "shadow": map-merge(
+      map-get($utilities, "shadow"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "shadow"), "values"),
+          (nav: $box-shadow-nav, inner: $box-shadow-inner),
+
+        ),
+      ),
+    ),
+  )
+);
+
+
+
+
+@import "../bootstrap/scss/bootstrap";
+$font-family-sans-serif:      "Roboto Condensed", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+//
+// Stretched link
+//
+
+.stretched-link {
+  &::#{$stretched-link-pseudo-element} {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $stretched-link-z-index;
+    content: "";
+    cursor: pointer;
+  }
+}
+.list-group-item-action {
+
+  // Hover state
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+
+}
+

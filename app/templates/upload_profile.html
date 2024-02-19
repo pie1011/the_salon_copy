@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% set active_page = "gallery" %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+      <div class="col">
+  
+        <h1>Upload an image</h1>
+        <hr>
+  
+        <form action="/upload_profile" method="POST" enctype="multipart/form-data">
+
+              <input type=file name=file>
+              <input type=submit value=Upload>
+            </form>
+      </div>
+    </div>
+  </div>
+
+  
+{% endblock %}
+

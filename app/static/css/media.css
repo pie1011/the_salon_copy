@@ -1,0 +1,24 @@
+
+@media (min-width: 576px) {
+    .hero-bg {
+        height: 110vh;
+        padding-top: 10px;
+    }
+    .hero-container {
+        margin-top: 0;
+        padding-top: 10px;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(90deg, rgba(185, 214, 216, 0) 0%, rgb(185, 214, 216) 25%,  rgba(255,255,255,0) 75%) !important;
+    } 
+}
+
+@media only screen and (max-width: 768px) {
+    .btn-menu {
+        background-color: var(--color-bright-mid-light);
+        color: var(--color-bright);
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+
+
+}

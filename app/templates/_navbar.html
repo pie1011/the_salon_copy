@@ -1,0 +1,92 @@
+    
+<nav class="navbar navbar-expand-lg navbar-light bg-light p-2 sticky-top shadow-nav">
+    <!--
+    <button id="theme-toggle" class="btn btn-sm ml-2 small" type="button" name="Toggle Contrast Mode" style="top:80px; left:0;">
+        <span class="d-block-light d-none"><i class="fas fa-adjust bg-dark p-1 rounded-circle text-white"></i></span>
+        <span class="d-block-dark d-none"><i class="fas fa-adjust bg-dark p-1 rounded-circle text-white" style="transform: rotate(180deg);"></i></span>
+    </button> -->
+
+
+    <div class="container-fluid">
+        <a class="navbar-brand logo me-0" href="{{ url_for('index') }}">
+            the<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#127680" class="bi bi-scissors" viewBox="0 0 16 16" style="margin-right: 3px; transform: rotate(15deg)">
+                <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+        </svg>salon</a>
+
+
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end align-items-center pb-1" id="navbarSupportedContent">
+            <div class="navbar-nav">
+                <ul class="navbar-nav">
+                    {% for key, value in menu.items()  %}
+                        <li class="nav-item" >
+                            <a class="nav-link m-lg-1 mt-lg-2 p-lg-2 nav-1"  aria-current="page" href="{{ value }}">{{ key }}</a>
+                        </li>
+                    {% endfor %}
+
+                    <li class="nav-item dropdown">
+                        <!-- Logged In Menu -->
+                        {% if current_user.is_authenticated %}
+                            <a class="nav-link dropdown-toggle d-none d-lg-block mx-1 nav-2 " id="mainLoginAccount" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                <i class="fas fa-user-circle fs-5 my-1 mx-1 p-1"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mainLoginAccount" data-popper-placement="bottom-end">
+                                {% if current_user.user_type == 'stylist' %}
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('account') }}">Stylist Account</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('account') }}">Client Account</a></li>
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('appointments') }}">Request Appointment</a></li>
+                                {% endif %}
+                                <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('buy_gift') }}">Buy Gift Card</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('logout') }}">Logout</a></li>
+                            </ul>
+                            <ul class="dropdown-menu dropdown-menu-end d-lg-none d-block" aria-labelledby="mainLoginAccount" data-popper-placement="bottom-end">
+                                {% if current_user.user_type == 'stylist' %}
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('account') }}">Stylist Account</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('account') }}">Client Account</a></li>
+                                    <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('appointments') }}">Request Appointment</a></li>
+                                {% endif %}
+                                <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('buy_gift') }}">Buy Gift Card</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item nav-link nav-2" aria-current="page" href="{{ url_for('logout') }}">Logout</a></li>
+                            </ul>
+                        {% else %}
+                            <a class="nav-link dropdown-toggle d-none d-lg-block  mx-1 nav-2" id="mainLoginAccount" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                <i class="far fa-user-circle fs-5 m-1 p-1"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end" aria-labelledby="mainLoginAccount">
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('client_login') }}">Client Login</a></li>
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('client_register') }}">Client Register</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('stylist_login') }}">Stylist Login</a></li>
+                            </ul>
+                            <ul class="dropdown-menu dropdown-menu-end d-lg-none show">
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('client_login') }}">Client Login</a></li>
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('client_register') }}">Client Register</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item nav-link nav-2 " aria-current="page" href="{{ url_for('stylist_login') }}">Stylist Login</a></li>
+                            </ul>
+                        {% endif %}
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</nav>
+
+
+<!-- Show flashed messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+            {% include "_alert.html" %}
+    {% endif %}
+{% endwith  %}
+

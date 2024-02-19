@@ -1,0 +1,122 @@
+
+{% macro renderClient(username) %}
+    {% for client in clients %}
+        {% if client.username == username %}
+        {{ client.first_name }} {{ client.last_name }}
+        {{ caller() }}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro renderAllClient(username) %}
+    {% for client in all_clients %}
+        {% if client.username == username %}
+        {{ client.first_name }} {{ client.last_name }}
+        {{ caller() }}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro renderStylist(username) %}
+{% for stylist in stylists %}
+    {% if stylist.username == username %}
+        {{ stylist.first_name }}<span class="me-2 d-none d-lg-inline"> {{ stylist.last_name }}</span>
+        {{ caller() }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+{% set duration = event.services | sum(attribute='duration') %}
+{% set duration_hours = duration // 60 %}
+{% set duration_minutes = duration - duration_hours|round %}
+
+<div class="card shadow p-0 mt-3 mx-3 bg-body appointment-today-height carousel-today-body">
+    <div class="card-header bg-white border-0 pt-3 pe-0 d-flex flex-row justify-content-end align-content-end">
+        <div class="text-end">
+            <button type="button" class="btn btn-pill-right btn-bright-mid-light border-0 fs-4 px-3 {{ active_modal }} " data-bs-toggle="modal" data-bs-target="#clientCard{{event.client_name}}" style="min-width: 55%;">
+                {% if user_type == 'stylist' %}
+                    {% call renderClient(event.client_name) %}{% endcall %} 
+                {% elif user_type == 'admin' %}
+                    {% call renderAllClient(event.client_name) %}{% endcall %} 
+                {% endif %} <span class="align-top"><i class="fas fa-user fs-6"></i></span>
+            </button>
+            <br />
+            {% if event.requested == True %}
+            <span class="badge bg-white text-dark rounded-pill m-2 p-0 text-nowrap"><i class="fas fa-exclamation-triangle text-danger"></i> REQUESTED</span> 
+            {% else %}
+                <span class="badge bg-white text-dark rounded-pill m-2"><i class="fas fa-check"></i> confirmed!</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body pt-0" style="margin-top: -30px;">
+        <div class="container p-0 d-flex flex-column justify-content-start align-content-center display-6">
+            <div class="border-bottom fs-5">
+                <div><span class="fs-1 pe-4">{{ event.time.strftime("%l:%M %p") }}</span> </div>
+            </div>
+            <div  class="d-flex justify-content-between border-top p-1 fs-5">
+                <span>{{ event.date.strftime("%B %d, %Y") }}</span> 
+                <div>
+                    <span class="align-text-bottom"><i class="fas fa-stopwatch fs-6 small"></i></span> 
+                    <span class="align-middle">
+                        {% if duration_hours|round|int > 0 %}
+                            {{ duration_hours|round|int }} 
+                            {% if duration_hours|round|int > 1 %} hours {% else %} hour {% endif %}
+                        {% endif %}
+                        {% if duration_hours|round|int > 0 and duration - (duration_hours|round|int * 60) > 0 %}
+                            and 
+                        {% endif %}
+                        {% if duration - (duration_hours|round|int * 60) > 0 %}
+                            {{ duration - (duration_hours|round|int * 60) }} minutes
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <table class="table table-borderless mt-3 p-2 rounded bg-light">
+            <thead class="border-bottom">
+                <th class="ps-3 pb-1">Service</th>
+                <th class="text-center pb-1">Time</th>
+                <th class="text-end pe-3 pb-1">Price</th>
+            </thead>
+            <tbody>
+                {% for service in event.services %}
+                <tr>
+                    <td class="ps-3 py-1">
+                        {{ loop.index }}. 
+                        {{ service.name }}
+                    </td>
+                    <td class="text-end  py-1">
+                        {{ service.duration }} 
+                        <span class="d-none d-xl-inline-block" >minutes</span>
+                        <span class="d-inline-block d-xl-none" >min</span>
+                    </td>
+                    <td class="text-end pe-3  py-1">${{ service.price|round|int }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fs-6 fw-bold p-3">Total Price: &nbsp; $ {{ event.services | sum(attribute='price') |round|int }} </td>
+                </tr>
+            </tfoot>
+    
+        </table>
+        <div class="container-fluid">
+            <p>Notes: </p> {{ event.notes }}
+        </div>
+    </div>
+    <div class="card-footer">
+        {% if event.requested == True %}
+        <form action="{{ url_for('confirm_appt', id=event.id) }}" method="post">
+            {{ confirm_form.hidden_tag() }}
+            {{ confirm_form.submit(class_="float-start btn-primary rounded-pill btn-bright btn-small") }}
+        </form>
+    {% else %}
+        <span class="badge bg-white text-dark rounded-pill"><i class="fas fa-check"></i> confirmed!</span>
+    {% endif %}
+    {% if user_type == 'admin' %}
+        <span class="float-end">Stylist: {% call renderStylist(event.stylist_name) %}{% endcall %}</span>
+    {% endif %}
+    </div>
+</div>
+<br>
+
